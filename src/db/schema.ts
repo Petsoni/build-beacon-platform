@@ -1,5 +1,15 @@
-import {boolean, index, pgTable, text, timestamp} from "drizzle-orm/pg-core";
-import {relations} from "drizzle-orm";
+import {
+  boolean,
+  index,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import * as t from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -28,9 +38,9 @@ export const session = pgTable(
     userAgent: text("user_agent"),
     userId: text("user_id")
       .notNull()
-      .references(() => user.id, {onDelete: "cascade"}),
+      .references(() => user.id, { onDelete: "cascade" }),
   },
-  (table) => [index("session_userId_idx").on(table.userId)],
+  (table) => [index("session_userId_idx").on(table.userId)]
 );
 
 export const account = pgTable(
@@ -41,7 +51,7 @@ export const account = pgTable(
     providerId: text("provider_id").notNull(),
     userId: text("user_id")
       .notNull()
-      .references(() => user.id, {onDelete: "cascade"}),
+      .references(() => user.id, { onDelete: "cascade" }),
     accessToken: text("access_token"),
     refreshToken: text("refresh_token"),
     idToken: text("id_token"),
@@ -54,7 +64,7 @@ export const account = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("account_userId_idx").on(table.userId)],
+  (table) => [index("account_userId_idx").on(table.userId)]
 );
 
 export const verification = pgTable(
@@ -70,26 +80,54 @@ export const verification = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("verification_identifier_idx").on(table.identifier)],
+  (table) => [index("verification_identifier_idx").on(table.identifier)]
 );
 
-export const userRelations = relations(user, ({many}) => ({
+const projectStatus = pgEnum("project_status", [
+  "NDA",
+  "In Development",
+  "Finished",
+  "Finding ideas",
+]);
+
+export const developerProject = pgTable(
+  "developer_project",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 256 }).notNull(),
+    status: projectStatus("status").default("In Development"),
+    link: text("link"),
+  },
+  (table) => [t.uniqueIndex("title_idx").on(table.title)]
+);
+
+export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
 }));
 
-export const sessionRelations = relations(session, ({one}) => ({
+export const sessionRelations = relations(session, ({ one }) => ({
   user: one(user, {
     fields: [session.userId],
     references: [user.id],
   }),
 }));
 
-export const accountRelations = relations(account, ({one}) => ({
+export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
     references: [user.id],
   }),
 }));
 
-export const schema = { user, session, account, verification }
+export const schema = {
+  user,
+  session,
+  account,
+  verification,
+  developerProject,
+  projectStatus,
+};

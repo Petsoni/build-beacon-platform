@@ -8,6 +8,13 @@
       "when": 1765225637964,
       "tag": "0000_dry_kingpin",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765312257491,
+      "tag": "0001_massive_patriot",
+      "breakpoints": true
     }
   ]
 }

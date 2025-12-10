@@ -7,9 +7,8 @@ export const auth = betterAuth({
   database: drizzleAdapter(dbConfig, {
     provider: "pg",
   }),
-  trustedOrigins: [process.env.APP_URL!],
+  trustedOrigins: [process.env.CLIENT_URL!],
   baseURL: process.env.BETTER_AUTH_URL!,
-  session: { modelName: "sessions" },
   socialProviders: {
     twitter: {
       clientId: process.env.TWITTER_CLIENT_ID!,

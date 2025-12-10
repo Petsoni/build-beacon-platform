@@ -1,10 +1,12 @@
+import { dbConfig } from "@/config";
+import { user } from "@/db/schema";
 import { Context } from "hono";
 
 /**
- * @api {get} /users Get All Users
- * @apiGroup Users
+ * @api {get} /developers Get All Developers
+ * @apiGroup Developers
  * @access Private
  */
 export const getAllDevelopers = async (c: Context) => {
-  return c.json(["dev1", "dev2"]);
+  return c.json(await dbConfig.select().from(user));
 };

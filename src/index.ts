@@ -1,8 +1,9 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { auth } from "./config/auth";
 import { logger } from "hono/logger";
+import { auth } from "./config/auth";
 import { errorHandler, notFound } from "./middleware";
+import developerRoutes from "./routes/developers";
 
 const app = new Hono<{
   Variables: {
@@ -36,18 +37,17 @@ app.get("/", (c) => {
 });
 
 // Better-Auth - Handle all auth routes
-app.all("/api/auth/*", async (c) => {
+app.all("/auth/*", async (c) => {
   return await auth.handler(c.req.raw);
 });
 
-// Users Route
-// app.route(API_BASE + "/developers", Users);
+// Developers Route
+app.route("/developers", developerRoutes);
 
 app.onError(errorHandler);
 
 app.notFound(notFound);
 
-// Export for both Bun and Cloudflare Workers
 export default {
   port,
   fetch: app.fetch,

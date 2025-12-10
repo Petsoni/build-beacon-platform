@@ -2,8 +2,8 @@ import { getAllDevelopers } from "@/services/developers-service";
 import { protect } from "@/middleware";
 import { Hono } from "hono";
 
-const users = new Hono();
+const developerRoutes = new Hono();
 
-users.get("/", protect, getAllDevelopers);
+developerRoutes.get("/", protect, getAllDevelopers);
 
-export default users;
+export default developerRoutes;

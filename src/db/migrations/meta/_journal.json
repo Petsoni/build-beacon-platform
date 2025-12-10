@@ -15,6 +15,34 @@
       "when": 1765312257491,
       "tag": "0001_massive_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765395640070,
+      "tag": "0002_last_azazel",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765396100178,
+      "tag": "0003_clean_cable",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1765396848364,
+      "tag": "0004_oval_jimmy_woo",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1765396987562,
+      "tag": "0005_conscious_black_bolt",
+      "breakpoints": true
     }
   ]
 }

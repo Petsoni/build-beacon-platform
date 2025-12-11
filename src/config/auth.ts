@@ -1,8 +1,9 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { dbConfig } from "@/config/db-config";
-import { openAPI } from "better-auth/plugins";
+import { customSession, openAPI } from "better-auth/plugins";
 import { sendVerificationEmail } from "@/lib/email-sender";
+import { getUserUsername } from "@/services/auth-service";
 
 export const auth = betterAuth({
   database: drizzleAdapter(dbConfig, {
@@ -12,7 +13,6 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL!,
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
   },
   emailVerification: {
     sendOnSignUp: true,
@@ -35,5 +35,18 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     },
   },
-  plugins: [openAPI()],
+  plugins: [
+    openAPI(),
+    customSession(async ({ user, session }) => {
+      const query = await getUserUsername(user.id);
+
+      return {
+        user: {
+          ...user,
+          username: query[0].username,
+        },
+        session,
+      };
+    }),
+  ],
 });

@@ -1,4 +1,6 @@
 import Mailgun from "mailgun.js"; // mailgun.js v11.1.0
+// @ts-ignore
+// this is a bug, not an error
 import FormData from "form-data";
 
 interface EmailParams {

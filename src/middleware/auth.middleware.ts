@@ -3,6 +3,9 @@ import { Context, Next } from "hono";
 
 export const protect = async (c: Context, next: Next) => {
   // Extract the session from the incoming request headers
+
+  console.log(c.req.raw.headers);
+
   const session = await auth.api.getSession({ headers: c.req.raw.headers });
 
   if (!session || !session.user) {
@@ -15,8 +18,6 @@ export const protect = async (c: Context, next: Next) => {
       401
     );
   }
-
-  console.log(session.user);
 
   c.set("user", session.user);
   c.set("session", session.session);

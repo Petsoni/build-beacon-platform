@@ -10,7 +10,7 @@ const app = new Hono<{
     user: typeof auth.$Infer.Session.user | null;
     session: typeof auth.$Infer.Session.session | null;
   };
-}>({ strict: false }).basePath(process.env.API_BASE!);
+}>({ strict: false }).basePath(process.env.API_BASE_URL!);
 
 const port = process.env?.PORT || 8000;
 

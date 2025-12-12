@@ -39,3 +39,25 @@ export const updateDeveloperXAccount = async (c: Context) => {
 
   return c.json(dbUsernameChange[0].updatedUsername);
 };
+
+/**
+ * @api {post} Update project details and status
+ * @apiGroup Developers
+ * @access Private
+ */
+export const updateProjectDetailsAndStatus = async (c: Context) => {
+  const newProjectDetails = await c.req.json();
+  console.log(newProjectDetails);
+
+  const dbProjectChange = await dbConfig
+    .update(developerProject)
+    .set({
+      status: newProjectDetails.status,
+      title: newProjectDetails.title,
+      link: newProjectDetails.link,
+    })
+    .where(eq(developerProject.id, newProjectDetails.id))
+    .returning({ updatedProject: developerProject });
+
+  return c.json(dbProjectChange[0].updatedProject);
+};

@@ -4,6 +4,7 @@ import { dbConfig } from "@/config/db-config";
 import { customSession, openAPI } from "better-auth/plugins";
 import { sendVerificationEmail } from "@/lib/email-sender";
 import { getUserUsername } from "@/services/auth-service";
+import { getProjectsForDeveloper } from "@/services/projects-service";
 
 export const auth = betterAuth({
   database: drizzleAdapter(dbConfig, {
@@ -39,11 +40,13 @@ export const auth = betterAuth({
     openAPI(),
     customSession(async ({ user, session }) => {
       const query = await getUserUsername(user.id);
+      const userProject = await getProjectsForDeveloper(user.id);
 
       return {
         user: {
           ...user,
           username: query[0].username,
+          currentProject: userProject,
         },
         session,
       };

@@ -3,7 +3,7 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { auth } from "./config/auth";
 import { errorHandler, notFound } from "./middleware";
-import developerRoutes from "./routes/developers";
+import developerRoutes from "./routes/developers-controller";
 
 const app = new Hono<{
   Variables: {

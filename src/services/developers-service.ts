@@ -1,15 +1,27 @@
 import { dbConfig } from "@/config";
-import { user } from "@/db/schema";
+import { developerProject, user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Context } from "hono";
 
 /**
- * @api {get} Get All Developers
+ * @api {get} Get All Developers for explore page
  * @apiGroup Developers
  * @access Private
  */
-export const getAllDevelopers = async (c: Context) => {
-  return c.json(await dbConfig.select().from(user));
+export const getAllDevelopersForExplorePage = async (c: Context) => {
+  const dbQuery = await dbConfig
+    .select()
+    .from(user)
+    .leftJoin(developerProject, eq(user.id, developerProject.userId))
+    .where(eq(user.emailVerified, true));
+  const mappedData = dbQuery.map((item) => {
+    return {
+      developerProject: item.developer_project,
+      user: item.user,
+    };
+  });
+
+  return c.json(mappedData);
 };
 
 /**

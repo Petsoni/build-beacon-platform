@@ -1,0 +1,148 @@
+<section class="generic-section-wrapper flex flex-col items-center">
+  <h2 class="mb-6">Edit account information</h2>
+
+  <form [formGroup]="userProfileForm" class="flex flex-col gap-4 w-full lg:w-1/2 md:w-1/2 pr-4">
+    <div class="flex flex-col gap-6">
+      <div>
+        <h5>Details</h5>
+        <p class="text-gray-500!">
+          Manage your basic account information such as your full name and email address
+        </p>
+      </div>
+      <div class="generic-label-input">
+        <label for="name">Name</label>
+        <input type="text" id="name" pInputText formControlName="name" />
+      </div>
+      <div class="generic-label-input">
+        <label for="email">Email</label>
+        <input type="text" id="email" pInputText formControlName="email" />
+        <div class="inline-flex items-center justify-center gap-2">
+          @if (userProfileForm.controls.emailVerified.value) {
+          <p-tag severity="success">
+            <tb-icon iconName="Mail" />
+            Email verified
+          </p-tag>
+          } @else {
+          <div class="flex flex-col gap-2">
+            <p-tag severity="warn">
+              <tb-icon iconName="Mail" />
+              Email not verified
+            </p-tag>
+            <button
+              pButton
+              outlined
+              (click)="sendVerificationEmail(); showMessage()"
+              [disabled]="visible()"
+            >
+              Send verification email
+            </button>
+            @if (visible()) {
+            <p-message [life]="3000" severity="success" size="small"
+              >Verificatoin email send</p-message
+            >
+            }
+          </div>
+          }
+          <tb-icon
+            iconName="InfoCircle"
+            class="!text-gray-500"
+            pTooltip="Your email must be verified to appear on the Explore page"
+          />
+        </div>
+        <button pButton class="mt-4">Save changes</button>
+      </div>
+    </div>
+    <p-divider></p-divider>
+    <div class="flex flex-col gap-4" formGroupName="projectForm">
+      <div>
+        <h5>Project information</h5>
+        <p class="text-gray-500!">
+          Enter details about the project you are currently working on. Fill in the name and select
+          the current status of the project. This information will be visible to others in the
+          context of your profile.
+        </p>
+      </div>
+      <div class="generic-label-input">
+        <label for="projectName">Name</label>
+        <input type="text" id="projectName" pInputText formControlName="title" />
+      </div>
+      <div class="generic-label-input">
+        <label for="email">Status</label>
+        <p-select
+          [options]="projectStatusOptions"
+          optionLabel="status"
+          optionValue="status"
+          formControlName="status"
+          class="w-full md:w-56"
+        />
+      </div>
+      @if (userProfileForm.controls.projectForm.controls.status.value == "Finished") {
+      <div class="generic-label-input">
+        <label for="link">Link to the product (optional but recommended)</label>
+        <input
+          type="text"
+          id="link"
+          pInputText
+          formControlName="link"
+          placeholder="https://myawesomeproject.com"
+        />
+      </div>
+      }
+      <button
+        pButton
+        class="mt-4 w-fit"
+        (click)="updateProjectDetails()"
+        [disabled]="userProfileForm.controls.projectForm.invalid"
+      >
+        Save project information
+      </button>
+    </div>
+    <p-divider></p-divider>
+    <div class="flex flex-col gap-6">
+      <div>
+        <h5>Socials</h5>
+        <p class="text-gray-500!">
+          Connect your social media profiles and other services (like X, GitHub). This may help
+          others find you.
+        </p>
+      </div>
+      <div class="generic-label-input">
+        <label for="username" class="inline-flex items-center gap-2"
+          ><tb-icon iconName="BrandX"></tb-icon> X username</label
+        >
+        <p-input-group>
+          <p-inputgroup-addon>
+            <tb-icon iconName="At"></tb-icon>
+          </p-inputgroup-addon>
+          <input type="text" id="username" pInputText formControlName="username" />
+          <button
+            pButton
+            outlined
+            (click)="updateUsername()"
+            [disabled]="userProfileForm.controls.username.invalid"
+          >
+            Save username
+          </button>
+        </p-input-group>
+      </div>
+      <div class="generic-label-input">
+        <label class="inline-flex items-center gap-2"
+          ><tb-icon iconName="BrandGithub"></tb-icon> Github</label
+        >
+        <button pButton disabled severity="secondary" pTooltip="Comming soon">
+          <tb-icon iconName="Link"></tb-icon>
+          Connect account
+        </button>
+      </div>
+      <div class="generic-label-input">
+        <label class="inline-flex items-center gap-2"
+          ><tb-icon iconName="BrandStripe"></tb-icon> Stripe (Revenue checking)</label
+        >
+        <button pButton disabled severity="secondary" pTooltip="Comming soon">
+          <tb-icon iconName="Link"></tb-icon>
+          Connect account
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

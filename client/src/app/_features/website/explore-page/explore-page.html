@@ -1,0 +1,38 @@
+<section class="generic-section-wrapper">
+  <h2>Explore developers like never before</h2>
+  <p class="text-gray-500! w-1/2 mb-10">
+    Browse a curated directory of independent creators sharing their projects, statuses, and
+    progress. Follow their journeys, find collaboration opportunities, and support emerging
+    innovations directly.
+  </p>
+
+  <div class="w-full flex flex-col md:flex-row lg:flex-row justify-between items-start mb-4 gap-3">
+    <div
+      class="w-full md:w-auto lg:w-auto flex flex-col md:flex-row lg:flex-row items-center justify-center gap-3"
+    >
+      <p-inputgroup class="min-w-80 w-full!">
+        <p-inputgroup-addon>
+          <tb-icon iconName="Search"></tb-icon>
+        </p-inputgroup-addon>
+        <input pInputText placeholder="Find your favourite indie dev" />
+      </p-inputgroup>
+      <p-select
+        [options]="filterOptions"
+        optionLabel="name"
+        placeholder="Currently..."
+        class="w-full md:w-56"
+        showClear
+      />
+    </div>
+    <p-tag rounded severity="secondary">
+      <tb-icon iconName="UsersGroup" />
+      {{ developersService.allDevelopers().length }} developers
+    </p-tag>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    @for (developer of developersService.allDevelopers(); track developer) {
+    <dev-explore-card [developer]="developer" />
+    }
+  </div>
+</section>

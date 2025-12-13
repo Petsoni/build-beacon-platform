@@ -1,0 +1,18 @@
+<div
+  class="w-full sticky top-4 z-999 shadow-xs bg-white flex justify-between items-center pl-4 pr-2 py-1.5 rounded-full border border-gray-200"
+>
+  <h6 class="font-semibold">BuildBeacon</h6>
+  <div class="flex items-center justify-center gap-4">
+    <!-- TODO -->
+    <a routerLink="/explore" routerLinkActive="active">Explore</a>
+    <a routerLink="/profile" routerLinkActive="active">Profile</a>
+  </div>
+  @if(userManagementService.currentUser() != null) {
+  <button pButton rounded severity="danger" (click)="logout()">Logout</button>
+  } @else {
+  <button pButton rounded routerLink="/login">
+    Get seen
+    <tb-icon iconName="ArrowUpRight" />
+  </button>
+  }
+</div>

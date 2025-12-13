@@ -1,0 +1,11 @@
+<router-outlet />
+<p-toast key="global-toast" position="bottom-center"></p-toast>
+<p-confirmpopup key="global-confirm-popup"></p-confirmpopup>
+<p-confirmDialog key="global-confirm-dialog" class="confirmation-dialog-component">
+  <ng-template #message let-message>
+    <div class="confirmation-dialog-message-wrapper">
+      <tb-icon iconName="AlertTriangle" class="xl" />
+      <p class="light-text">{{ message.message }}</p>
+    </div>
+  </ng-template>
+</p-confirmDialog>

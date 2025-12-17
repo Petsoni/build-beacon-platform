@@ -98,7 +98,7 @@ export const developerProject = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    title: varchar("title", { length: 256 }).notNull(),
+    title: varchar("title", { length: 256 }),
     status: projectStatus("status").default("In Development"),
     link: text("link"),
   },

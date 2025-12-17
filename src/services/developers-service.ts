@@ -1,5 +1,6 @@
 import { dbConfig } from "@/config";
 import { developerProject, user } from "@/db/schema";
+import { uuid, uuidv4 } from "better-auth/*";
 import { eq } from "drizzle-orm";
 import { Context } from "hono";
 
@@ -48,16 +49,28 @@ export const updateDeveloperXAccount = async (c: Context) => {
 export const updateProjectDetailsAndStatus = async (c: Context) => {
   const newProjectDetails = await c.req.json();
   console.log(newProjectDetails);
+  let dbProjectChange;
 
-  const dbProjectChange = await dbConfig
-    .update(developerProject)
-    .set({
-      status: newProjectDetails.status,
-      title: newProjectDetails.title,
-      link: newProjectDetails.link,
-    })
-    .where(eq(developerProject.id, newProjectDetails.id))
-    .returning({ updatedProject: developerProject });
-
-  return c.json(dbProjectChange[0].updatedProject);
+  if (newProjectDetails.id != null) {
+    dbProjectChange = await dbConfig
+      .update(developerProject)
+      .set({
+        status: newProjectDetails.status,
+        title: newProjectDetails.title,
+        link: newProjectDetails.link,
+      })
+      .where(eq(developerProject.id, newProjectDetails.id))
+      .returning();
+  } else {
+    dbProjectChange = await dbConfig
+      .insert(developerProject)
+      .values({
+        status: newProjectDetails.status,
+        title: newProjectDetails.title,
+        link: newProjectDetails.link,
+        userId: newProjectDetails.userId,
+      })
+      .returning();
+  }
+  return c.json(dbProjectChange[0]);
 };

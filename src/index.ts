@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { auth } from "./config/auth";
+import { auth } from "@/config";
 import { errorHandler, notFound } from "./middleware";
 import developerRoutes from "./routes/developers-controller";
 
@@ -10,9 +10,7 @@ const app = new Hono<{
     user: typeof auth.$Infer.Session.user | null;
     session: typeof auth.$Infer.Session.session | null;
   };
-}>({ strict: false }).basePath(process.env.API_BASE_URL!);
-
-const port = process.env?.PORT || 8000;
+}>({ strict: false });
 
 app.use(logger());
 
@@ -30,25 +28,25 @@ app.use(
 );
 
 // Home Route
-app.get("/", (c) => {
+app.get("/api", (c) => {
   return c.json({
     message: "Welcome to the Build Beacon API",
   });
 });
 
 // Better-Auth - Handle all auth routes
-app.all("/auth/*", async (c) => {
+app.all("/api/auth/*", async (c) => {
   return await auth.handler(c.req.raw);
 });
 
 // Developers Route
-app.route("/developers", developerRoutes);
+app.route("/api/developers", developerRoutes);
 
 app.onError(errorHandler);
 
 app.notFound(notFound);
 
 export default {
-  port,
   fetch: app.fetch,
+  port: Number(process.env.PORT) || 3000,
 };

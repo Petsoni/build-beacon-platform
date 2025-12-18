@@ -21,7 +21,7 @@ app.use(
       "http://localhost:3000",
       `${process.env.CLIENT_URL}`,
       "http://localhost:8000",
-    ], // TODO update for production
+    ], // TODO update for production,
     credentials: true,
     maxAge: 86400, // Cache preflight for 1 day
   })

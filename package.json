@@ -5,7 +5,9 @@
     "db:up": "docker compose up -d",
     "db:generate-migration": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "build": "bun build ./src/index.ts --outdir ./dist/server --target bun",
+    "start": "bun run ./dist/server/index.js"
   },
   "dependencies": {
     "better-auth": "^1.4.5",

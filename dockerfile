@@ -2,6 +2,7 @@ FROM oven/bun:1-slim AS base
 
 WORKDIR /app
 
+FROM base as build
 COPY package.json bun.lockb ./
 RUN bun install --production --frozen-lockfile
 

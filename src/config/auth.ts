@@ -1,10 +1,10 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { dbConfig } from "@/config/db-config";
-import { customSession, openAPI } from "better-auth/plugins";
-import { sendVerificationEmail } from "@/lib/email-sender";
-import { getUserUsername } from "@/services/auth-service";
-import { getProjectsForDeveloper } from "@/services/projects-service";
+import {betterAuth} from "better-auth";
+import {drizzleAdapter} from "better-auth/adapters/drizzle";
+import {dbConfig} from "@/config/db-config";
+import {customSession, openAPI} from "better-auth/plugins";
+import {sendVerificationEmailWithResend} from "@/lib/email-sender";
+import {getUserUsername} from "@/services/auth-service";
+import {getProjectsForDeveloper} from "@/services/projects-service";
 
 export const auth = betterAuth({
   database: drizzleAdapter(dbConfig, {
@@ -23,9 +23,10 @@ export const auth = betterAuth({
     useSecureCookies: true,
   },
   emailVerification: {
+    expiresIn: 60 * 5,
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      void sendVerificationEmail({
+      void sendVerificationEmailWithResend({
         to: user.email,
         subject: "Verify your email address",
         text: `Click the link to verify your email: \n\n${url} \n\nVerification link expires in 60 minutes`,

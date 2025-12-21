@@ -1,8 +1,7 @@
-import { dbConfig } from "@/config";
-import { developerProject, user } from "@/db/schema";
-import { uuid, uuidv4 } from "better-auth/*";
-import { eq } from "drizzle-orm";
-import { Context } from "hono";
+import {dbConfig} from "@/config";
+import {developerProject, user} from "@/db/schema";
+import {eq} from "drizzle-orm";
+import {Context} from "hono";
 
 /**
  * @api {get} Get All Developers for explore page
@@ -31,12 +30,12 @@ export const getAllDevelopersForExplorePage = async (c: Context) => {
  * @access Private
  */
 export const updateDeveloperXAccount = async (c: Context) => {
-  const { username, userId } = await c.req.json();
+  const {username, userId} = await c.req.json();
   const dbUsernameChange = await dbConfig
     .update(user)
-    .set({ username: username })
+    .set({username: username})
     .where(eq(user.id, userId))
-    .returning({ updatedUsername: user.username });
+    .returning({updatedUsername: user.username});
 
   return c.json(dbUsernameChange[0].updatedUsername);
 };
@@ -73,4 +72,21 @@ export const updateProjectDetailsAndStatus = async (c: Context) => {
       .returning();
   }
   return c.json(dbProjectChange[0]);
+};
+
+export const updateDeveloperNameAndEmail = async (c: Context) => {
+  const {userId, name, email} = await c.req.json();
+  const currentUser = (await dbConfig.select().from(user).where(eq(user.id, userId)))[0];
+  const isForValidation = currentUser.email == email && currentUser.emailVerified
+  const dbUsernameChange = await dbConfig
+    .update(user)
+    .set({name: name, email: email, emailVerified: isForValidation})
+    .where(eq(user.id, userId))
+    .returning({
+      updatedEmail: user.email,
+      updatedName: user.name,
+      verifiedEmail: user.emailVerified
+    });
+
+  return c.json(dbUsernameChange[0]);
 };

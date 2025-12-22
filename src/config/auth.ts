@@ -25,11 +25,10 @@ export const auth = betterAuth({
   emailVerification: {
     expiresIn: 60 * 5,
     sendOnSignUp: true,
-    sendVerificationEmail: async ({ user, url, token }, request) => {
+    sendVerificationEmail: async ({user, url, token}, request) => {
       void sendVerificationEmailWithResend({
         to: user.email,
-        subject: "Verify your email address",
-        text: `Click the link to verify your email: \n\n${url} \n\nVerification link expires in 60 minutes`,
+        verificationUrl: url,
       });
     },
   },
@@ -46,7 +45,7 @@ export const auth = betterAuth({
   },
   plugins: [
     openAPI(),
-    customSession(async ({ user, session }) => {
+    customSession(async ({user, session}) => {
       const query = await getUserUsername(user.id);
       const userProject = await getProjectsForDeveloper(user.id);
 

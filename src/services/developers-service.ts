@@ -47,7 +47,6 @@ export const updateDeveloperXAccount = async (c: Context) => {
  */
 export const updateProjectDetailsAndStatus = async (c: Context) => {
   const newProjectDetails = await c.req.json();
-  console.log(newProjectDetails);
   let dbProjectChange;
 
   if (newProjectDetails.id != null) {

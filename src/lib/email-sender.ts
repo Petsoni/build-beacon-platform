@@ -44,7 +44,7 @@ export async function sendVerificationEmail(emailParams: EmailParams) {
   }
 }
 
-export async function sendVerificationEmailWithResend(emailParams: EmailParams) {
+export async function sendVerificationEmailWithResend(emailParams: {to: string, verificationUrl: string}) {
   const resendApiKey = process.env.RESEND_API_KEY!;
   const resendDomain = process.env.RESEND_DOMAIN!;
 
@@ -52,8 +52,12 @@ export async function sendVerificationEmailWithResend(emailParams: EmailParams) 
   const messageData = {
     from: `Build Beacon <noreply@${resendDomain}>`,
     to: emailParams.to,
-    subject: emailParams.subject,
-    text: emailParams.text,
+    template: {
+      id: 'verify-email',
+      variables: {
+        verification_url: emailParams.verificationUrl,
+      }
+    }
   };
 
   try {
